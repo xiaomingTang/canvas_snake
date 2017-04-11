@@ -141,7 +141,8 @@ window.onload=function(){
  	
 	var map=new Map(),
 		dir=0,
-		loop=undefined;
+		loop=undefined,
+		lastPos=[];
  	if(!map.ctx){
 		alert("你的浏览器不支持canvas,所以你看不到这个页面,请升级浏览器至最新版本,并:该页面即将关闭!");
 		window.close();
