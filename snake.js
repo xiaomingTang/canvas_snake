@@ -177,7 +177,6 @@ window.onload=function(){
 						m=dx>0 ? 1 : -1 ,
 						n=dy>0 ? 1 : -1 ,
 						_dir=Math.abs(dx)-Math.abs(dy)>0 ? 38+m : 39+n ;
-					$("msg").innerHTML+="dir:"+dir+"_dir"+_dir+"<br />";
 					if(_dir-dir==2 || _dir-dir==-2){
 						return false;
 					}
