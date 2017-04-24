@@ -53,18 +53,6 @@ window.onload=function(){
 		this.ctx = config.canvas.getContext ? config.canvas.getContext("2d") : null;
 		
 		deployMap(this, config);
-		/*
-		this.cellWidth = config.cellWidth;
-		this.speed = config.speed;
-		
-		this.width = config.width;
-		this.height = config.height;
-		this.num = Math.floor(this.width / this.cellWidth);
-		
-		this.available={};	//可用点, 不含蛇头蛇身, 一维对象
-		this.head=[];		//蛇头, 一维数组
-		this.body=[];		//蛇体, 二维数组
-		this.food=[];		//食物, 一维数组*/
 	}
 	Map.prototype={
 		constructor: Map,
@@ -225,7 +213,8 @@ window.onload=function(){
 		switch(t.id){
 			case "speed":
 				t.blur();
-				map.speed = parseInt(t.value);
+				config.speed = parseInt(t.value);
+				deployMap(map,config);
 				break;
 			case "cell-width":
 				t.blur();
@@ -239,10 +228,6 @@ window.onload=function(){
 		}
 	}
 	$("snake-setting").onchange = onchangeHandler;
-	
-	
-	
-	
 	
 	
 	//	触摸事件及绑定
