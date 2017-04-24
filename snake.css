@@ -23,9 +23,9 @@ body{
 	background-color: #889;
 	color: #ffe;
 	cursor: pointer;
-	opacity: 0.1;	/* 其他 */
-	filter: alpha(opacity=10);	/* IE滤镜 */
-	-moz-opacity: 0.1;	/* Firefox私有 */
+	opacity: 0.2;	/* 其他 */
+	filter: alpha(opacity=20);	/* IE滤镜 */
+	-moz-opacity: 0.2;	/* Firefox私有 */
 }
 .aside:hover{
 	width: auto;
