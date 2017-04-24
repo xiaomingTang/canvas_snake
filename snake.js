@@ -30,7 +30,7 @@ window.onload=function(){
 		speed: speed
 	};
 	var dir = 0;
-	var loop = undefined;
+	var loop = -1;
 	
 	function deployMap(instanceOfMap, config){
 		instanceOfMap.cellWidth = config.cellWidth;
@@ -44,7 +44,7 @@ window.onload=function(){
 		instanceOfMap.body=[];		//蛇体, 二维数组
 		instanceOfMap.food=[];		//食物, 一维数组
 		
-		loop = undefined;
+		loop = -1;
 		dir = 0;
 	}
 	
@@ -143,10 +143,11 @@ window.onload=function(){
 			}
 			if( !(nextHead[0]+"_"+nextHead[1] in this.available) && (nextHead.toString() != this.food.toString())){
 				clearInterval(loop);
-				loop=undefined;
+				loop = -1;
 				dir=0;
 				alert("胜败乃兵家常事 大侠请重新来过");
 				this.ctx.clearRect(0, 0, this.width, this.height);
+				clearInterval(loop);
 				deployMap(map, config);
 				map.init();
 				return this;
@@ -194,11 +195,11 @@ window.onload=function(){
 			return false;
 		} else if(temp === 32){
 			clearInterval(loop);
-			loop = undefined;
+			loop = -1;
 			return;
 		}
 		dir = temp;
-		if(typeof loop === "undefined" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
+		if(loop < 0 && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 			loop=setInterval(function(){
 				if(interval < 0){
 					interval = 1000 / map.speed;
@@ -225,6 +226,7 @@ window.onload=function(){
 			case "cell-width":
 				t.blur();
 				config.cellWidth = parseInt(t.value);
+				clearInterval(loop);
 				deployMap(map,config);
 				map.init();
 				
@@ -259,7 +261,7 @@ window.onload=function(){
 						return false;
 					}
 					dir=_dir;
-					if(typeof loop === "undefined" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
+					if(typeof loop === "null" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 						loop=setInterval(function(){
 							if(interval < 0){
 								interval = 1000 / map.speed;
