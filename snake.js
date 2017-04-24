@@ -248,6 +248,7 @@ window.onload=function(){
 	
 	//	触摸事件及绑定
 	var lastPos = [];
+	var interval = 1000 / map.speed;
 	function handleTouchEvent(event){
 		if(event.touches.length==1){
 			switch(event.type){
@@ -255,6 +256,9 @@ window.onload=function(){
 					lastPos=[event.touches[0].screenX,event.touches[0].screenY];
 					break;
 				case "touchmove":
+					if(event.target.className && event.target.className.indexOf("setting-bar")){
+						return false;
+					}
 					event.preventDefault();
 					var dx= event.touches[0].screenX-lastPos[0],
 						dy= event.touches[0].screenY-lastPos[1],
@@ -267,8 +271,11 @@ window.onload=function(){
 					dir=_dir;
 					if(typeof loop === "undefined" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 						loop=setInterval(function(){
-							map.move(dir);
-						},200);
+							if(interval-- < 0){
+								interval = 1000 / map.speed;
+								map.move(dir);
+							}
+						},1);
 					}
 					lastPos=[event.touches[0].screenX,event.touches[0].screenY];
 					break;
