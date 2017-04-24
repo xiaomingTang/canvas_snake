@@ -4,4 +4,8 @@
 }
 body{
 	overflow:hidden;
+	background-color: #889;
+}
+.center{
+	text-align: center;
 }
