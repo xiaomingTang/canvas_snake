@@ -1,5 +1,7 @@
 window.onload=function(){
  	"use strict";
+	!(function(){
+	
 	function $(id){
 		return document.getElementById(id);
 	}
@@ -186,17 +188,15 @@ window.onload=function(){
 		}
 		
 	}
-	
-	//alert("键盘方向键 或 移动端滑屏 控制方向，空格键暂停，暂停之后别往回走哦，会狗带的。ok, have a nice day ! enjoy the game !");
 
 	var map = new Map(config);
 	if(!$("snake").getContext){
-		alert("你的浏览器不支持canvas,所以你看不到这个页面,请升级浏览器至最新版本,并:该页面即将关闭!");
-		window.close();
+		alert("your browser don't support canvas, so you can't see the snake !");
 	}
 		
 	map.init();
 	
+	alert("GUIDE: Arrow key for control ** Space key for pause ** there is setting bar at top left ** ok, wish you have a nice trip with my snake ! (IE and SF isn't supported and I don't know why...)");
 	
 	var interval = 1000 / map.speed;
 	//	键盘事件绑定
@@ -280,6 +280,8 @@ window.onload=function(){
 	}
 	document.ontouchstart=handleTouchEvent;
 	document.ontouchmove=handleTouchEvent;
+	
+	})();
 	
 }
  	
