@@ -97,7 +97,6 @@ window.onload=function(){
 					pos=key.split("_");
 				this.food[0]=parseInt(pos[0]);
 				this.food[1]=parseInt(pos[1]);
-				console.log(this.food[0] + "---" + this.food[1]);
 				delete this.available[key];
 			}
 			else{
@@ -196,7 +195,7 @@ window.onload=function(){
 		
 	map.init();
 	
-	alert("GUIDE: Arrow key for control ** Space key for pause ** there is setting bar at top left ** ok, wish you have a nice trip with my snake ! (IE and SF isn't supported and I don't know why...)");
+	console.log("GUIDE: Arrow key for control ** Space key for pause ** there is setting bar at top left ** ok, wish you have a nice trip with my snake ! (IE and SF isn't supported and I don't know why...)");
 	
 	var interval = 1000 / map.speed;
 	//	键盘事件绑定
