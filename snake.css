@@ -6,6 +6,58 @@ body{
 	overflow:hidden;
 	background-color: #889;
 }
-.center{
+.content{
 	text-align: center;
 }
+
+
+.aside{
+	position: absolute;
+	left: 2em;
+	top: 2em;
+	width: 2em;
+	height: 2em;
+	line-height: 2em;
+	overflow: hidden;
+	border: 1px solid #c78;
+	background-color: #889;
+	color: #ffe;
+	cursor: pointer;
+	opacity: 0.1;	/* 其他 */
+	filter: alpha(opacity=10);	/* IE滤镜 */
+	-moz-opacity: 0.1;	/* Firefox私有 */
+}
+.aside:hover{
+	width: auto;
+	height: auto;
+	opacity: 0.9;	/* 其他 */
+	filter: alpha(opacity=90);	/* IE滤镜 */
+	-moz-opacity: 0.9;	/* Firefox私有 */
+}
+
+.aside::before{
+	content: "set";
+	display: block;
+	text-align: center;
+	background-color: #c78;
+	color: #ffe;
+}
+
+.setting-row{
+	padding: 0 1em;
+	cursor: default;
+}
+.guide-bar{
+	display: inline-block;
+	width:6em;
+	margin-right: 0.5em;
+}
+.setting-bar{
+	margin: 0 0.5em;
+	cursor: pointer;
+}
+
+
+
+
+

@@ -12,41 +12,71 @@ window.onload=function(){
 	//	取得屏幕的宽高并赋给canvas
 	var sx = document.documentElement.clientWidth || document.body.clientWidth;
 	var	sy = document.documentElement.clientHeight || document.body.clientHeight;
-	var w = sx > sy ? sy * 0.95 : sx * 0.95;
 	var canvas = $("snake");
+	var w = sx > 0 ? sx > sy ? sy * 0.8 : sx * 0.8 : canvas.width;
 	canvas.width = canvas.height = w;
-	canvas.style.marginTop = (sx > sy ? sy * 0.025 : sx * 0.025) + "px";
+	canvas.style.marginTop = w * 0.1 + "px";
+	
+	var cellWidth = parseInt($("cell-width").value);
+	var speed = parseInt($("speed").value);
 	//	config作为全局变量，因为输了之后的重新初始化需要用到
 	var config = {
 		canvas: canvas,
 		width: w,
-		height: w
+		height: w,
+		cellWidth: cellWidth,
+		speed: speed
 	};
+	var dir = 0;
+	var loop = undefined;
+	
+	function deployMap(instanceOfMap, config){
+		instanceOfMap.cellWidth = config.cellWidth;
+		instanceOfMap.speed = config.speed;
+		instanceOfMap.width = config.width;
+		instanceOfMap.height = config.height;
+		instanceOfMap.num = Math.floor(instanceOfMap.width / instanceOfMap.cellWidth);
+		
+		instanceOfMap.available={};	//可用点, 不含蛇头蛇身, 一维对象
+		instanceOfMap.head=[];		//蛇头, 一维数组
+		instanceOfMap.body=[];		//蛇体, 二维数组
+		instanceOfMap.food=[];		//食物, 一维数组
+		
+		loop = undefined;
+		dir = 0;
+	}
 	
 	
  	function Map(config){
 		this.ctx = config.canvas.getContext ? config.canvas.getContext("2d") : null;
-		this.width = config.width / 10;
-		this.height = config.height / 10;
+		
+		deployMap(this, config);
+		/*
+		this.cellWidth = config.cellWidth;
+		this.speed = config.speed;
+		
+		this.width = config.width;
+		this.height = config.height;
+		this.num = Math.floor(this.width / this.cellWidth);
 		
 		this.available={};	//可用点, 不含蛇头蛇身, 一维对象
 		this.head=[];		//蛇头, 一维数组
 		this.body=[];		//蛇体, 二维数组
-		this.food=[];		//食物, 一维数组
+		this.food=[];		//食物, 一维数组*/
 	}
 	Map.prototype={
 		constructor: Map,
 		init: function(){
-			this.ctx.clearRect(0,0,this.width*10,this.height*10);
+			this.ctx.clearRect(0,0,this.width,this.height);
 			//构建地图
-			for(var i=0,leni=this.width;i<leni;i++){
-				for(var j=0,lenj=this.height;j<lenj;j++){
+			for(var i=0,leni=this.num;i<leni;i++){
+				for(var j=0,lenj=this.num;j<lenj;j++){
 					this.available[i+"_"+j]=1;
 				}
 			}
 			//随机蛇头
-			this.head[0]=Math.floor(Math.random()*this.width);
-			this.head[1]=Math.floor(Math.random()*this.height);
+			this.head[0]=Math.floor(Math.random()*this.num);
+			this.head[1]=Math.floor(Math.random()*this.num);
 			delete this.available[this.head[0]+"_"+this.head[1]];
 			//随机食物
 			this.randFood();
@@ -75,18 +105,18 @@ window.onload=function(){
 		},
 		clear: function(arr){
 			var x=arr[0],y=arr[1];
-			this.ctx.clearRect(10*x,10*y,10,10);
+			this.ctx.clearRect(x * this.cellWidth, y * this.cellWidth, this.cellWidth, this.cellWidth);
 			this.render(x,y,"#666");	//	background，清除的时候和背景色不同，可以显示轨迹，意外之喜哦。。。
 		},
 		render: function(x,y,color){
 			this.ctx.fillStyle=color;
 			this.ctx.strokeStyle= "#5d5d5d";	//	border
-			this.ctx.fillRect(10*x,10*y,10,10);
-			this.ctx.strokeRect(10*x,10*y,10,10);
+			this.ctx.fillRect(x * this.cellWidth, y * this.cellWidth, this.cellWidth, this.cellWidth);
+			this.ctx.strokeRect(x * this.cellWidth, y * this.cellWidth, this.cellWidth, this.cellWidth);
 		},
 		renderMap: function(){
-			for(var i=0,leni=this.height;i<leni;i++){
-				for(var j=0,lenj=this.width;j<lenj;j++){
+			for(var i=0,leni=this.num;i<leni;i++){
+				for(var j=0,lenj=this.num;j<lenj;j++){
 					this.render(j,i,"#636363");	//	background
 				}
 			}
@@ -127,7 +157,7 @@ window.onload=function(){
 				loop=undefined;
 				dir=0;
 				alert("胜败乃兵家常事 大侠请重新来过");
-				this.ctx.clearRect(0,0,this.width*10,this.height*10);
+				this.ctx.clearRect(0, 0, this.width, this.height);
 				map=new Map(config);
 				map.init();
 				return this;
@@ -152,24 +182,23 @@ window.onload=function(){
 		},
 		
 		isHeadAgainst: function(){
-			return (this.head[0]<0 || this.head[0]==this.width || this.head[1]<0 ||this.head[1]==this.height );
+			return (this.head[0]<0 || this.head[0]==this.num || this.head[1]<0 ||this.head[1]==this.num );
 		}
 		
 	}
- 	
-	var dir = 0;
-	var loop = undefined;
-	var lastPos = [];
+	
+	//alert("键盘方向键 或 移动端滑屏 控制方向，空格键暂停，暂停之后别往回走哦，会狗带的。ok, have a nice day ! enjoy the game !");
+
 	var map = new Map(config);
-	if(!map.ctx){
+	if(!$("snake").getContext){
 		alert("你的浏览器不支持canvas,所以你看不到这个页面,请升级浏览器至最新版本,并:该页面即将关闭!");
 		window.close();
 	}
-	
-	alert("键盘方向键 或 移动端滑屏 控制方向，空格键暂停，暂停之后别往回走哦，会狗带的。ok, have a nice day ! enjoy the game !");
-	
+		
 	map.init();
 	
+	
+	var interval = 1000 / map.speed;
 	//	键盘事件绑定
 	document.onkeydown=function(e){
 		var event = e || window.event;
@@ -181,12 +210,44 @@ window.onload=function(){
 		}
 		if(typeof loop === "undefined" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 			loop=setInterval(function(){
-				map.move(dir);
-			},100);
+				if(interval-- < 0){
+					interval = 1000 / map.speed;
+					map.move(dir);
+				}
+			},1);
 		}
 	}
 	
+	
+	//	修改参数事件处理程序
+	function onchangeHandler(event){
+		var e = myjs.getEvent(event);
+		var t = myjs.getTarget(e);
+		switch(t.id){
+			case "speed":
+				t.blur();
+				map.speed = parseInt(t.value);
+				break;
+			case "cell-width":
+				t.blur();
+				config.cellWidth = parseInt(t.value);
+				deployMap(map,config);
+				map.init();
+				
+				break;
+			default:
+				break;
+		}
+	}
+	$("snake-setting").onchange = onchangeHandler;
+	
+	
+	
+	
+	
+	
 	//	触摸事件及绑定
+	var lastPos = [];
 	function handleTouchEvent(event){
 		if(event.touches.length==1){
 			switch(event.type){
