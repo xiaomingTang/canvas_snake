@@ -261,7 +261,7 @@ window.onload=function(){
 						return false;
 					}
 					dir=_dir;
-					if(typeof loop === "null" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
+					if(loop < 0 && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 						loop=setInterval(function(){
 							if(interval < 0){
 								interval = 1000 / map.speed;
@@ -271,7 +271,7 @@ window.onload=function(){
 							}
 						},5);
 					}
-					lastPos=[event.touches[0].screenX,event.touches[0].screenY];
+					lastPos=[event.touches[0].screenX, event.touches[0].screenY];
 					break;
 				default:
 					break;
