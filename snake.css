@@ -23,16 +23,10 @@ body{
 	background-color: #889;
 	color: #ffe;
 	cursor: pointer;
-	opacity: 0.2;	/* 其他 */
-	filter: alpha(opacity=20);	/* IE滤镜 */
-	-moz-opacity: 0.2;	/* Firefox私有 */
 }
 .aside:hover{
 	width: auto;
 	height: auto;
-	opacity: 0.9;	/* 其他 */
-	filter: alpha(opacity=90);	/* IE滤镜 */
-	-moz-opacity: 0.9;	/* Firefox私有 */
 }
 
 .aside::before{

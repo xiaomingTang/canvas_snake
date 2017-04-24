@@ -147,7 +147,7 @@ window.onload=function(){
 				dir=0;
 				alert("胜败乃兵家常事 大侠请重新来过");
 				this.ctx.clearRect(0, 0, this.width, this.height);
-				map=new Map(config);
+				deployMap(map, config);
 				map.init();
 				return this;
 			}
@@ -192,29 +192,35 @@ window.onload=function(){
 		var temp = event.keyCode;
 		if(temp-dir==2 || temp-dir==-2){
 			return false;
-		} else if(temp === 32 || (temp.toString() in {"37":0,"38":0,"39":0,"40":0})){
-			dir=temp;
+		} else if(temp === 32){
+			clearInterval(loop);
+			loop = undefined;
+			return;
 		}
+		dir = temp;
 		if(typeof loop === "undefined" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 			loop=setInterval(function(){
-				if(interval-- < 0){
+				if(interval < 0){
 					interval = 1000 / map.speed;
 					map.move(dir);
+					console.log(map.speed);
+				} else {
+					interval--;
 				}
-			},1);
+				
+			},5);
 		}
 	}
 	
 	
-	//	修改参数事件处理程序
+	//	修改设置事件处理程序
 	function onchangeHandler(event){
 		var e = myjs.getEvent(event);
 		var t = myjs.getTarget(e);
 		switch(t.id){
 			case "speed":
 				t.blur();
-				config.speed = parseInt(t.value);
-				deployMap(map,config);
+				map.speed = config.speed = parseInt(t.value);
 				break;
 			case "cell-width":
 				t.blur();
@@ -255,11 +261,13 @@ window.onload=function(){
 					dir=_dir;
 					if(typeof loop === "undefined" && (dir.toString() in {"37":0,"38":0,"39":0,"40":0})){
 						loop=setInterval(function(){
-							if(interval-- < 0){
+							if(interval < 0){
 								interval = 1000 / map.speed;
 								map.move(dir);
+							} else {
+								interval--;
 							}
-						},1);
+						},5);
 					}
 					lastPos=[event.touches[0].screenX,event.touches[0].screenY];
 					break;
